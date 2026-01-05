@@ -44,7 +44,17 @@ To get the project up and running, follow these steps:
     - Install all the necessary dependencies listed in `requirements.txt`.
     - Optionally add the `/bin` directory to your `$PATH` for the current session.
 
-2. (Optional but recommended) Add the `/bin` directory to your `$PATH` permanently:
+2. **Install Noto Fonts** *(required for proper font rendering)*:
+
+   In order to view the generated output correctly, you will likely need to install the **Noto** fonts (especially if you're using fancy or special Unicode characters).
+   
+   ```bash
+   sudo apt install fonts-noto
+   ```
+
+   These fonts help ensure that all the Unicode characters render correctly in your terminal.
+
+3. (Optional but recommended) Add the `/bin` directory to your `$PATH` permanently:
 
     - Temporary setup (for the current session only):
 
