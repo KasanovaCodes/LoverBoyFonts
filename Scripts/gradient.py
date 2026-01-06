@@ -31,7 +31,6 @@ def apply_gradient_to_text(text, colors, angle):
     non_space_count = sum(1 for char in text if char != ' ' and char != '⠀')  # Count non-space characters
 
     # Calculate the gradient factor for each character based on the angle
-    gradient_index = 0
     for row in range(num_lines):
         for col in range(len(lines[row])):
             char = lines[row][col]
@@ -41,15 +40,11 @@ def apply_gradient_to_text(text, colors, angle):
                 continue
 
             # Normalize the position (row, col) based on the angle
-            # For horizontal (0 degrees), we just use the column position
-            # For vertical (90 degrees), we just use the row position
-            # For diagonal gradients (45 degrees), we combine row and col position
             if angle == 0:  # Horizontal
                 factor = col / num_cols
             elif angle == 90:  # Vertical
                 factor = row / num_lines
             else:  # Diagonal or other angles (45 degrees)
-                # Diagonal gradient: Treat the position in the grid as part of a smooth transition
                 dist = (row + col) / (num_lines + num_cols)  # Use normalized row+col for smooth diagonal
                 factor = dist  # Normalize the factor between 0 and 1 for diagonal
 
@@ -59,13 +54,70 @@ def apply_gradient_to_text(text, colors, angle):
             interp_factor = (factor * (num_colors - 1)) - color_index_1
 
             color = interpolate_color(colors[color_index_1], colors[color_index_2], interp_factor)
-            result += f'[color={color}]{char}[/color]'
 
-            gradient_index += 1
+            # Add the character wrapped with the appropriate color tag
+            result += f'[color={color}]{char}[/color]'
 
         result += '\n'  # Add newline after each line to preserve the structure
 
     return result
+
+def clean_up_bbcode(bbcode):
+    """Clean up the BBCode by merging adjacent color blocks with the same color."""
+    
+    # Regular expression to capture color blocks (opening tag, content, closing tag)
+    color_pattern = re.compile(r'(\[color=[^\]]+\])([^[]+?)(\[/color\])')
+
+    # Initial sanitized version of the bbcode
+    sanitized = bbcode
+
+    # Keep checking and merging until no more changes happen
+    changes_made = True
+    while changes_made:
+        changes_made = False
+        # Find all matches for color blocks
+        matches = list(color_pattern.finditer(sanitized))
+        
+        # If no matches, break out
+        if len(matches) < 2:
+            break
+        
+        i = 0
+        while i < len(matches) - 1:
+            # Match for the first color block
+            match1 = matches[i]
+            # Match for the next color block
+            match2 = matches[i + 1]
+            
+            # Check if the colors match
+            color1 = match1.group(1)  # The opening color tag of the first block
+            color2 = match2.group(1)  # The opening color tag of the second block
+
+            if color1 == color2:
+                # Extract the content from both blocks
+                content1 = match1.group(2)
+                content2 = match2.group(2)
+                
+                # Get the separator between the two blocks
+                separator = sanitized[match1.end():match2.start()]
+                
+                # Combine the contents and preserve the separator
+                new_content = content1 + separator + content2
+
+                # Construct the new BBCode after merging the blocks
+                new_bbcode = sanitized[:match1.start()] + color1 + new_content + match2.group(3) + sanitized[match2.end():]
+
+                # Update the sanitized BBCode
+                sanitized = new_bbcode
+
+                # Flag that a change was made and restart checking from the beginning
+                changes_made = True
+                break  # Restart because the text has changed and the indices have shifted
+            else:
+                # If colors don't match, move to the next pair of blocks
+                i += 1
+
+    return sanitized
 
 def get_colors_from_input():
     """Prompt user to input an array of colors and return as a list of hex color strings"""
@@ -128,8 +180,12 @@ def main():
 
     # Generate the gradient and output it
     output_text = apply_gradient_to_text(input_text, colors, angle)
+
+    # Clean up the BBCode (merge adjacent color blocks)
+    cleaned_output = clean_up_bbcode(output_text)
+
     print("\nGenerated BBCode with gradient:")
-    print(output_text)
+    print(cleaned_output)
 
 # Run the program
 if __name__ == "__main__":
