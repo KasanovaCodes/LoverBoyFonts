@@ -7,7 +7,7 @@ SCRIPT_DIR=$(dirname "$(realpath "$0")")
 VENV_DIR="$SCRIPT_DIR/../venv"
 
 # Path to the Python script
-PYTHON_SCRIPT="$SCRIPT_DIR/../Scripts/generatefancytexts.py"
+PYTHON_SCRIPT="$SCRIPT_DIR/../scripts/generatefancytexts.py"
 
 # Activate the virtual environment
 source "$VENV_DIR/bin/activate"
