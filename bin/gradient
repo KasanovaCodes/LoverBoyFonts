@@ -4,7 +4,7 @@
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 
 # Path to the Python script
-PYTHON_SCRIPT="$SCRIPT_DIR/../Scripts/gradient.py"
+PYTHON_SCRIPT="$SCRIPT_DIR/../scripts/gradient.py"
 
 # Run the Python script
 python3 "$PYTHON_SCRIPT"
