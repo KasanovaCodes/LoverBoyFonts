@@ -1,4 +1,9 @@
-import fancytexts
+try:
+    import fancytexts
+except ImportError:
+    print("Error: 'fancytexts' is not installed.")
+    print("Please run the project setup script and ensure the virtual environment is active.")
+    exit(1)
 
 def get_user_input():
     """Function to prompt for user input."""
