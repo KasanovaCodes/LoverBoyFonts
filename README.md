@@ -74,8 +74,9 @@ To get the project up and running, follow these steps:
    ```
 
    These fonts help ensure that all the Unicode characters render correctly in your terminal.
+   **Tip:** Restart your terminal after installation to ensure the new fonts take effect.
 
-3. (Optional but recommended) Add the `/bin` directory to your `$PATH` permanently:
+4. (Optional but recommended) Add the `/bin` directory to your `$PATH` permanently:
 
     * Temporary setup (for the current session only):
 
