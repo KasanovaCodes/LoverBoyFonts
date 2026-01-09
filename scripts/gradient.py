@@ -146,7 +146,7 @@ def get_colors_from_input():
             normalized_colors.append('#' + color.lower())  # Ensure each color has a leading '#'
         else:
             print(f"Invalid hex color: {color}. Skipping.")
-            return []
+            continue
 
     return normalized_colors
 
