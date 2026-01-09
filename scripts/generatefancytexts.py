@@ -1,14 +1,15 @@
+import sys
+
 try:
     import fancytexts
 except ImportError:
     print("Error: 'fancytexts' is not installed.")
     print("Please run the project setup script and ensure the virtual environment is active.")
-    exit(1)
+    sys.exit(1)
 
 def get_user_input():
     """Function to prompt for user input."""
-    text = input("Enter the text you want to convert: ")
-    return text
+    return input("Enter the text you want to convert: ")
 
 def print_fancy_text_options(text):
     """Function to print different fancy text styles using the style codes."""
@@ -56,9 +57,12 @@ def print_fancy_text_options(text):
             print(f"Error: Could not apply style '{style_name}'. Error: {e}")
 
 def main():
-    """Main function to execute the program."""
-    text = get_user_input()
-    print_fancy_text_options(text)
+    try:
+        text = get_user_input()
+        print_fancy_text_options(text)
+    except KeyboardInterrupt:
+        print("\nInterrupted by user. Exiting.")
+        sys.exit(130)
 
 if __name__ == "__main__":
     main()
