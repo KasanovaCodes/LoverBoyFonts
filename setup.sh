@@ -15,13 +15,13 @@ info() {
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 
 # Path to the virtual environment
-VENV_DIR="$SCRIPT_DIR/../venv"
+VENV_DIR="$SCRIPT_DIR/venv"
 
 # Path to the requirements.txt
-REQUIREMENTS_FILE="$SCRIPT_DIR/../requirements.txt"
+REQUIREMENTS_FILE="$SCRIPT_DIR/requirements.txt"
 
 # Path to the bin directory
-BIN_DIR="$SCRIPT_DIR/../bin"
+BIN_DIR="$SCRIPT_DIR/bin"
 
 # Step 1: Pre-flight Checks
 # Check for python3
