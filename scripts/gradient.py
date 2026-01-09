@@ -28,7 +28,6 @@ def apply_gradient_to_text(text, colors, angle):
     num_cols = max(len(line) for line in lines)  # Find the maximum number of columns
 
     num_colors = len(colors)
-    non_space_count = sum(1 for char in text if char != ' ' and char != '⠀')  # Count non-space characters
 
     # Calculate the gradient factor for each character based on the angle
     for row in range(num_lines):
@@ -121,7 +120,10 @@ def clean_up_bbcode(bbcode):
 
 def get_colors_from_input():
     """Prompt user to input an array of colors and return as a list of hex color strings"""
-    input_colors = input("Enter colors for the gradient (e.g., [#ff0000, #00ff00, #0000ff]): ").strip()
+    input_colors = input(
+        "Enter colors for the gradient (e.g., [#ff0000, #00ff00, #0000ff]): "
+    ).strip()
+
 
     # Check if the input is wrapped in brackets
     if input_colors.startswith('[') and input_colors.endswith(']'):
@@ -151,41 +153,50 @@ def get_colors_from_input():
 def main():
     """Main function to run the script"""
     # Get multi-line input text
-    print("Enter text (press Ctrl+D on new line to finish):")
-    input_text = sys.stdin.read().strip()
+    try:
+        print("Enter text (press Ctrl+D on new line to finish):")
+        input_text = sys.stdin.read().strip()
 
-    # Check if there's more than one line
-    num_lines = input_text.count('\n') + 1  # Count the number of lines
-
-    # If it's a single line, default to horizontal gradient
-    if num_lines == 1:
-        angle = 0  # Set angle to horizontal by default
-    else:
-        # Get the gradient angle from the user
-        angle = input("Enter gradient angle (0 for horizontal, 90 for vertical, 45 for diagonal): ").strip()
-
-        # Convert angle to integer
-        try:
-            angle = int(angle)
-        except ValueError:
-            print("Invalid angle entered. Exiting.")
+        if not input_text:
+            print("No input received. Exiting.")
             return
 
-    # Get the colors for the gradient as an array
-    colors = get_colors_from_input()
+        # Check if there's more than one line
+        num_lines = input_text.count('\n') + 1  # Count the number of lines
 
-    if not colors:
-        print("No valid colors entered. Exiting.")
-        return
+        # If it's a single line, default to horizontal gradient
+        if num_lines == 1:
+            angle = 0  # Set angle to horizontal by default
+        else:
+            # Get the gradient angle from the user
+            angle = input("Enter gradient angle (0 for horizontal, 90 for vertical, 45 for diagonal): ").strip()
 
-    # Generate the gradient and output it
-    output_text = apply_gradient_to_text(input_text, colors, angle)
+            # Convert angle to integer
+            try:
+                angle = int(angle)
+            except ValueError:
+                print("Invalid angle entered. Exiting.")
+                return
 
-    # Clean up the BBCode (merge adjacent color blocks)
-    cleaned_output = clean_up_bbcode(output_text)
+        # Get the colors for the gradient as an array
+        colors = get_colors_from_input()
 
-    print("\nGenerated BBCode with gradient:")
-    print(cleaned_output)
+        if not colors:
+            print("No valid colors entered. Exiting.")
+            return
+
+        # Generate the gradient and output it
+        output_text = apply_gradient_to_text(input_text, colors, angle)
+
+        # Clean up the BBCode (merge adjacent color blocks)
+        cleaned_output = clean_up_bbcode(output_text)
+
+        print("\nGenerated BBCode with gradient:")
+        print(cleaned_output)
+
+    except KeyboardInterrupt:
+        print("\nInterrupted by user. Exiting.")
+        sys.exit(130)
 
 # Run the program
 if __name__ == "__main__":
