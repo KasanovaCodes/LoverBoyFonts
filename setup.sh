@@ -16,6 +16,7 @@ SCRIPT_DIR=$(dirname "$(realpath "$0")")
 
 # Path to the virtual environment
 VENV_DIR="$SCRIPT_DIR/venv"
+VENV_FILE="$VENV_DIR/bin/activate"
 
 # Path to the requirements.txt
 REQUIREMENTS_FILE="$SCRIPT_DIR/requirements.txt"
@@ -42,7 +43,7 @@ On Debian/Whonix, run:
 fi
 
 #  Step 2: Create virtual environment
-if [ ! -d "$VENV_DIR" ]; then
+if [ ! -f "$VENV_FILE" ]; then
     echo "Virtual environment not found. Creating it now..."
     python3 -m venv "$VENV_DIR"
 else
